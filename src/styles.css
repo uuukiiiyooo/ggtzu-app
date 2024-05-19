@@ -1,0 +1,87 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+}
+
+section {
+  margin: 20px;
+  text-align: center;
+}
+
+#physiological-data, #diet-type, #food-information {
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+#calories-count, #total-calories {
+  display: none;
+}
+
+#total-calories {
+  margin-top: 17px;
+}
+
+#physiological-form, #diet-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row {
+  display: ruby;
+  width: 100%;
+  align-items: baseline;
+  margin-bottom: 7px;
+}
+
+.col {
+  flex: 1;
+  margin-right: 15px;
+}
+
+.col:last-child {
+  margin-right: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="number"] {
+  width: 100px;
+  text-align: center;
+}
+
+button {
+  margin: 12px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+/* Mobile-first media query */
+@media only screen and (min-width: 600px) {
+  /* Adjust layout for larger screens */
+  body {
+      font-size: 16px; /* Increase font size for better readability */
+  }
+
+  section {
+      margin: 30px auto; /* Center sections on larger screens */
+      max-width: 70%; /* Limit width of sections */
+  }
+}
