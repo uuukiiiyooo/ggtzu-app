@@ -24,12 +24,8 @@ section {
   border: 1px solid #ccc;
 }
 
-#calories-count, #total-calories {
+#calories-count, #reset-button, #diet-type, #food-information {
   display: none;
-}
-
-#total-calories {
-  margin-top: 17px;
 }
 
 #physiological-form, #diet-form {

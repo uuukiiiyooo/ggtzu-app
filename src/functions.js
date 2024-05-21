@@ -15,22 +15,12 @@ function addPhysiologicalData(event) {
     userData[key] = value;
   });
 
-  
-  // Log the userData object to the console
-  console.log(userData);
-  console.log(userData['height'], typeof userData['height']); 
-
   // Extract and convert the values
   const weight = parseFloat(userData.weight);
   const height = parseFloat(userData.height);
   const age = parseInt(userData.age);
-  console.log("Weight (kg):", weight);
-  console.log("Height (cm):", height);
-  console.log("Age (years):", age);
-  console.log(typeof weight, typeof height, typeof age); 
 
-
-  //Calculae Required Calories using formula based on sex
+  // Calculate Required Calories using formula based on sex
   let baseCalories;
   if (userData['sex'] === 'male') {
     baseCalories = (10 * weight) + (6.25 * height) - (5 * age) + 5;
@@ -38,30 +28,58 @@ function addPhysiologicalData(event) {
     baseCalories = (10 * weight) + (6.25 * height) - (5 * age) - 161;
   }
   const requiredCalories = baseCalories + (baseCalories * 0.1);
-  //Display Required Calories
+
+  // Display Required Calories
   document.getElementById('required-calories').innerText = requiredCalories.toFixed();
 
-  //Get the Training Calories and Multiplier inputs to calculate Total Calories
-  const trainingCaloriesInput = document.getElementById('training-calories');
+  // Get the Training Calories and Multiplier inputs to calculate Total Calories
   const multiplier = document.getElementById('multiplier');
+  const trainingCaloriesInput = document.getElementById('training-calories');
 
-  //Update Total Calories whenever Training Calories or Multiplier input changes
-  function updateTotalCalories() {
+  // Get the Carbs, Protein, and Fat Percentage inputs to calculate g/kg
+  const carbsPercentage = document.getElementById('carbs-percentage');
+  const proteinPercentage = document.getElementById('protein-percentage');
+  const fatPercentage = document.getElementById('fat-percentage');
+
+  // Update Totals whenever Training Calories, Multiplier, Carbs, Protein, or Fat Percentage inputs change
+  function updateTotals() {
     const trainingCaloriesValue = parseFloat(trainingCaloriesInput.value) || 0;
     const multiplierValue = parseFloat(multiplier.value) || 0;
     const adjustedCalories = requiredCalories + ((requiredCalories * multiplierValue) / 100);
     const totalCalories = adjustedCalories + trainingCaloriesValue;
     document.getElementById('total-calories-value').innerText = totalCalories.toFixed();
+
+    // Carbs calculation
+    const carbsPercentageValue = parseFloat(carbsPercentage.value) || 0;
+    const carbsAdjust = ((carbsPercentageValue * totalCalories) / 100) / 4;
+    const carbsGkg = carbsAdjust / weight;
+    document.getElementById('carbs-grkg').innerText = carbsGkg.toFixed(2);
+
+    // Protein calculation
+    const proteinPercentageValue = parseFloat(proteinPercentage.value) || 0;
+    const proteinAdjust = ((proteinPercentageValue * totalCalories) / 100) / 4;
+    const proteinGkg = proteinAdjust / weight;
+    document.getElementById('protein-grkg').innerText = proteinGkg.toFixed(2);
+
+    // Fat calculation
+    const fatPercentageValue = parseFloat(fatPercentage.value) || 0;
+    const fatAdjust = ((fatPercentageValue * totalCalories) / 100) / 9;
+    const fatGkg = fatAdjust / weight;
+    document.getElementById('fat-grkg').innerText = fatGkg.toFixed(2);
   }
 
-  trainingCaloriesInput.addEventListener('input', updateTotalCalories);
-  multiplier.addEventListener('change', updateTotalCalories);
+  multiplier.addEventListener('change', updateTotals);
+  trainingCaloriesInput.addEventListener('input', updateTotals);
+  carbsPercentage.addEventListener('input', updateTotals);
+  proteinPercentage.addEventListener('input', updateTotals);
+  fatPercentage.addEventListener('input', updateTotals);
 
-  //Trigger the input event to initialize Total Calories display
+  // Trigger the input event to initialize Total Calories display
   trainingCaloriesInput.dispatchEvent(new Event('input'));
 
-  //Hides button and shows calories rows
+  // Hide button and show calories rows
   document.getElementById('calculate-button').style.display = 'none';
-  document.getElementById('calories-count').style.display = 'ruby';
-  document.getElementById('total-calories').style.display = 'ruby-text';
+  document.getElementById('calories-count').style.display = 'block';
+  document.getElementById('reset-button').style.display = 'block';
+  document.getElementById('diet-type').style.display = 'block';
 }
