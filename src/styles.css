@@ -14,6 +14,10 @@ h1 {
   margin: 0;
 }
 
+h4 {
+  margin: auto;
+}
+
 section {
   margin: 20px;
   text-align: center;
@@ -28,7 +32,7 @@ section {
   display: none;
 }
 
-#physiological-form, #diet-form {
+#physiological-form, #diet-form, #food-details {
   display: flex;
   flex-wrap: wrap;
 }
