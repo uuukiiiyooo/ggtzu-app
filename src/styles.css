@@ -21,14 +21,11 @@ h4 {
 section {
   margin: 20px;
   text-align: center;
-}
-
-#physiological-data, #diet-type, #food-information {
   padding: 20px;
   border: 1px solid #ccc;
 }
 
-#calories-count, #reset-button, #diet-type, #food-information {
+#calories-count, #reset-button, #diet-type, #food-information, #added-food-menu {
   display: none;
 }
 
@@ -51,6 +48,11 @@ section {
 
 .col:last-child {
   margin-right: 0;
+}
+
+#added-menu-list .col {
+  width: 13%;
+  margin: 0;
 }
 
 label {

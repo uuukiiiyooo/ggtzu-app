@@ -2,6 +2,7 @@
 window.foodData = [
   {
     name: "Fuze Tea Té verde y sabor a limón de 600ml",
+    group: "Ultraprocessed",
     measure: 'ml',
     serving: 100,
     package: 600,
@@ -12,6 +13,7 @@ window.foodData = [
   },
   {
     name: "Atún en agua Tuny lata jumbo",
+    group: "Ultraprocessed",
     measure: 'g',
     serving: 100,
     package: 220,
@@ -19,5 +21,27 @@ window.foodData = [
     protein: 21,
     fat: 1,
     sodium: 260,
+  },
+  {
+    name: "Chicken Breast",
+    group: "Proteins",
+    measure: 'g',
+    serving: 100,
+    package: 500,
+    carbs: 0,
+    protein: 31,
+    fat: 3.6,
+    sodium: 50,
+  },
+  {
+    name: "Tofu",
+    group: "Proteins",
+    measure: 'g',
+    serving: 100,
+    package: 400,
+    carbs: 1.9,
+    protein: 8,
+    fat: 4.8,
+    sodium: 7,
   },
 ];

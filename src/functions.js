@@ -1,11 +1,32 @@
-// Populate the food dropdown
-function populateFoodDropdown() {
-  const foodSelect = document.getElementById('product');
-  foodData.forEach(food => {
+// Populate the food group and product dropdowns
+function populateFoodDropdowns() {
+  const foodGroupSelect = document.querySelector('#group');
+  const foodProductSelect = document.getElementById('product');
+
+  const foodGroups = Array.from(new Set(foodData.map(food => food.group)));
+  foodGroups.forEach(group => {
+    const option = document.createElement('option');
+    option.value = group;
+    option.textContent = group;
+    foodGroupSelect.appendChild(option);
+  });
+
+  foodGroupSelect.addEventListener('change', () => {
+    const selectedGroup = foodGroupSelect.value;
+    populateProducts(selectedGroup);
+  });
+}
+
+function populateProducts(selectedGroup) {
+  const foodProductSelect = document.getElementById('product');
+  foodProductSelect.innerHTML = '<option disabled selected hidden>Select Option</option>';
+
+  const filteredFoods = foodData.filter(food => food.group === selectedGroup);
+  filteredFoods.forEach(food => {
     const option = document.createElement('option');
     option.value = food.name;
     option.textContent = food.name;
-    foodSelect.appendChild(option);
+    foodProductSelect.appendChild(option);
   });
 }
 
@@ -77,7 +98,11 @@ function addPhysiologicalData(event) {
   document.getElementById('food-information').style.display = 'block';
 }
 
+
 // Function to calculate and display food information percentages
+
+let carbsFilled, proteinFilled, fatFilled, sodiumFilled = 0;
+
 function updateFoodInformation() {
   const foodSelect = document.getElementById('product');
   const selectedFood = foodData.find(food => food.name === foodSelect.value);
@@ -92,10 +117,10 @@ function updateFoodInformation() {
   const totalProteinNeeded = ((proteinPercentageValue * totalCalories) / 100) / 4;
   const totalFatNeeded = ((fatPercentageValue * totalCalories) / 100) / 9;
 
-  const carbsFilled = (selectedFood.carbs / totalCarbsNeeded) * 100;
-  const proteinFilled = (selectedFood.protein / totalProteinNeeded) * 100;
-  const fatFilled = (selectedFood.fat / totalFatNeeded) * 100;
-  const sodiumFilled = (selectedFood.sodium / 2000) *100
+  carbsFilled = (selectedFood.carbs / totalCarbsNeeded) * 100;
+  proteinFilled = (selectedFood.protein / totalProteinNeeded) * 100;
+  fatFilled = (selectedFood.fat / totalFatNeeded) * 100;
+  sodiumFilled = (selectedFood.sodium / 2000) *100
 
   const measure = (selectedFood.measure);
   const servingSize = (selectedFood.serving);
@@ -121,6 +146,116 @@ function updateFoodInformation() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  populateFoodDropdown();
+  populateFoodDropdowns();
   document.getElementById('product').addEventListener('change', updateFoodInformation);
+});
+
+
+// Function to add selected food to the menu
+let totalCarbsMenu = 0;
+let totalProteinMenu = 0;
+let totalFatMenu = 0;
+let totalSodiumMenu = 0;
+
+function addFoodToMenu() {
+  // Retrieve selected food group and product
+  const productSelect = document.getElementById('product');
+  const servingsInput = document.getElementById('addedServings');
+
+  const selectedProduct = productSelect.value;
+  const numberOServings = parseFloat(servingsInput.value);
+
+  if (!selectedProduct || isNaN(numberOServings) || numberOServings <= 0) {
+      alert("Please select a valid food product and enter a valid number of portions.");
+      return;
+  }
+
+  // Find the selected product details from the foodData (assuming this is available globally or imported)
+  const selectedFood = foodData.find(food => food.name === selectedProduct);
+
+  // Calculate the portion size and nutritional information
+  const totalSize = selectedFood.serving * numberOServings;
+  const totalCarbs = carbsFilled * numberOServings;
+  const totalProtein = proteinFilled * numberOServings;
+  const totalFat = fatFilled * numberOServings;
+  const totalSodium = sodiumFilled * numberOServings;
+
+  // Create a table row with the details
+  const table = document.querySelector('#menuTable tbody');
+  const row = document.createElement('tr');
+
+  const nameCell = document.createElement('td');
+  nameCell.textContent = selectedProduct;
+
+  const sizeCell = document.createElement('td');
+  sizeCell.textContent = totalSize.toFixed() + selectedFood.measure;
+
+  const carbsCell = document.createElement('td');
+  carbsCell.textContent = totalCarbs.toFixed() + '%';
+
+  const proteinCell = document.createElement('td');
+  proteinCell.textContent = totalProtein.toFixed() + '%';
+
+  const fatCell = document.createElement('td');
+  fatCell.textContent = totalFat.toFixed() + '%';
+
+  const sodiumCell = document.createElement('td');
+  sodiumCell.textContent = totalSodium.toFixed() + '%';
+
+  // Create remove button
+  const removeCell = document.createElement('td');
+  const removeButton = document.createElement('button');
+  removeButton.textContent = 'Remove';
+  removeButton.addEventListener('click', function() {
+      // Remove the row from the table
+      table.removeChild(row);
+
+      // Update the totals
+      totalCarbsMenu -= totalCarbs;
+      totalProteinMenu -= totalProtein;
+      totalFatMenu -= totalFat;
+      totalSodiumMenu -= totalSodium;
+
+      // Update the displayed totals
+      document.getElementById('total-carbs-menu').textContent = totalCarbsMenu.toFixed() + "%";
+      document.getElementById('total-protein-menu').textContent = totalProteinMenu.toFixed() + "%";
+      document.getElementById('total-fat-menu').textContent = totalFatMenu.toFixed() + "%";
+      document.getElementById('total-sodium-menu').textContent = totalSodiumMenu.toFixed() + "%";
+  });
+  removeCell.appendChild(removeButton);
+
+  // Add cells to the row
+  row.appendChild(nameCell);
+  row.appendChild(sizeCell);
+  row.appendChild(carbsCell);
+  row.appendChild(proteinCell);
+  row.appendChild(fatCell);
+  row.appendChild(sodiumCell);
+  row.appendChild(removeCell);
+
+  // Add the row to the table
+  table.appendChild(row);
+
+  // Update the total macros for the added food
+  totalCarbsMenu += totalCarbs;
+  totalProteinMenu += totalProtein;
+  totalFatMenu += totalFat;
+  totalSodiumMenu += totalSodium;
+
+  // Update the displayed totals
+  document.getElementById('total-carbs-menu').textContent = totalCarbsMenu.toFixed() + "%";
+  document.getElementById('total-protein-menu').textContent = totalProteinMenu.toFixed() + "%";
+  document.getElementById('total-fat-menu').textContent = totalFatMenu.toFixed() + "%";
+  document.getElementById('total-sodium-menu').textContent = totalSodiumMenu.toFixed() + "%";
+
+  // Clear the input fields
+  servingsInput.value = '';
+
+  document.getElementById('added-food-menu').style.display = 'block';
+  document.getElementById('added-food-menu').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.getElementById('add-food-button').addEventListener('click', function(event) {
+  event.preventDefault();  // Prevent form submission
+  addFoodToMenu();
 });
