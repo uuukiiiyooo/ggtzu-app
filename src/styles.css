@@ -14,8 +14,9 @@ h1 {
   margin: 0;
 }
 
-h4 {
+h2, h4 {
   margin: auto;
+  width: 100%;
 }
 
 section {
@@ -73,6 +74,10 @@ button {
   border: none;
   border-radius: 7px;
   cursor: pointer;
+}
+
+th {
+  width: 15%;
 }
 
 /* Mobile-first media query */

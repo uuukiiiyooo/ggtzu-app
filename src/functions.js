@@ -19,7 +19,7 @@ function populateFoodDropdowns() {
 
 function populateProducts(selectedGroup) {
   const foodProductSelect = document.getElementById('product');
-  foodProductSelect.innerHTML = '<option disabled selected hidden>Select Option</option>';
+  foodProductSelect.innerHTML = '<option disabled selected hidden>Seleccione</option>';
 
   const filteredFoods = foodData.filter(food => food.group === selectedGroup);
   filteredFoods.forEach(food => {
@@ -76,9 +76,9 @@ function addPhysiologicalData(event) {
     const proteinGkg = ((proteinPercentageValue * totalCalories) / 100) / 4 / weight;
     const fatGkg = ((fatPercentageValue * totalCalories) / 100) / 9 / weight;
 
-    document.getElementById('carbs-grkg').innerText = carbsGkg.toFixed(2);
-    document.getElementById('protein-grkg').innerText = proteinGkg.toFixed(2);
-    document.getElementById('fat-grkg').innerText = fatGkg.toFixed(2);
+    document.getElementById('carbs-grkg').innerText = carbsGkg.toFixed(1);
+    document.getElementById('protein-grkg').innerText = proteinGkg.toFixed(1);
+    document.getElementById('fat-grkg').innerText = fatGkg.toFixed(1);
     
     updateFoodInformation();
   }
@@ -93,56 +93,91 @@ function addPhysiologicalData(event) {
 
   document.getElementById('calculate-button').style.display = 'none';
   document.getElementById('calories-count').style.display = 'block';
-  document.getElementById('reset-button-row').style.display = 'block';
+  document.getElementById('reset-button').style.display = 'ruby';
   document.getElementById('diet-type').style.display = 'block';
   document.getElementById('food-information').style.display = 'block';
 }
 
 
 // Function to calculate and display food information percentages
-
 let carbsFilled, proteinFilled, fatFilled, sodiumFilled = 0;
 
 function updateFoodInformation() {
   const foodSelect = document.getElementById('product');
   const selectedFood = foodData.find(food => food.name === foodSelect.value);
 
-  if (!selectedFood) return;
+  if (!selectedFood) {
+    return;
+  } else if (selectedFood.group == "Ultraprocesados") {
+    const carbsPercentageValue = parseFloat(document.getElementById('carbs-percentage').value) || 0;
+    const proteinPercentageValue = parseFloat(document.getElementById('protein-percentage').value) || 0;
+    const fatPercentageValue = parseFloat(document.getElementById('fat-percentage').value) || 0;
 
-  const carbsPercentageValue = parseFloat(document.getElementById('carbs-percentage').value) || 0;
-  const proteinPercentageValue = parseFloat(document.getElementById('protein-percentage').value) || 0;
-  const fatPercentageValue = parseFloat(document.getElementById('fat-percentage').value) || 0;
+    const totalCarbsNeeded = ((carbsPercentageValue * totalCalories) / 100) / 4;
+    const totalProteinNeeded = ((proteinPercentageValue * totalCalories) / 100) / 4;
+    const totalFatNeeded = ((fatPercentageValue * totalCalories) / 100) / 9;
 
-  const totalCarbsNeeded = ((carbsPercentageValue * totalCalories) / 100) / 4;
-  const totalProteinNeeded = ((proteinPercentageValue * totalCalories) / 100) / 4;
-  const totalFatNeeded = ((fatPercentageValue * totalCalories) / 100) / 9;
+    carbsFilled = (selectedFood.carbs / totalCarbsNeeded) * 100;
+    proteinFilled = (selectedFood.protein / totalProteinNeeded) * 100;
+    fatFilled = (selectedFood.fat / totalFatNeeded) * 100;
+    sodiumFilled = (selectedFood.sodium / 2000) *100
 
-  carbsFilled = (selectedFood.carbs / totalCarbsNeeded) * 100;
-  proteinFilled = (selectedFood.protein / totalProteinNeeded) * 100;
-  fatFilled = (selectedFood.fat / totalFatNeeded) * 100;
-  sodiumFilled = (selectedFood.sodium / 2000) *100
+    const measure = (selectedFood.measure);
+    const servingSize = (selectedFood.serving);
+    const packageSize = (selectedFood.package);
+    const servingsPerPackage = packageSize / servingSize;
 
-  const measure = (selectedFood.measure);
-  const servingSize = (selectedFood.serving);
-  const packageSize = (selectedFood.package);
-  const servingsPerPackage = packageSize / servingSize;
+    const carbsPerPackage = carbsFilled * servingsPerPackage;
+    const proteinPerPackage = proteinFilled * servingsPerPackage;
+    const fatPerPackage = fatFilled * servingsPerPackage;
+    const sodiumPerPackage = sodiumFilled * servingsPerPackage;
 
-  const carbsPerPackage = carbsFilled * servingsPerPackage;
-  const proteinPerPackage = proteinFilled * servingsPerPackage;
-  const fatPerPackage = fatFilled * servingsPerPackage;
-  const sodiumPerPackage = sodiumFilled * servingsPerPackage;
+    document.getElementById('serving-size').innerText = servingSize.toFixed() + measure;
+    document.getElementById('package-size').innerText = packageSize.toFixed() + measure;
+    document.getElementById('servings-per-package').innerText = servingsPerPackage.toFixed(1);
+    document.getElementById('package-percentage').style.display = 'ruby';
+    document.getElementById('package-carbs-percentage').innerText = carbsPerPackage.toFixed() + '%';
+    document.getElementById('package-protein-percentage').innerText = proteinPerPackage.toFixed() + '%';
+    document.getElementById('package-fat-percentage').innerText = fatPerPackage.toFixed() + '%';
+    document.getElementById('package-sodium-percentage').innerText = sodiumPerPackage.toFixed() + '%';
+    document.getElementById('food-carbs-percentage').innerText = carbsFilled.toFixed() + '%';
+    document.getElementById('food-protein-percentage').innerText = proteinFilled.toFixed() + '%';
+    document.getElementById('food-fat-percentage').innerText = fatFilled.toFixed() + '%';
+    document.getElementById('food-sodium-percentage').innerText = sodiumFilled.toFixed() + '%';
+  } else {
+    const carbsPercentageValue = parseFloat(document.getElementById('carbs-percentage').value) || 0;
+    const proteinPercentageValue = parseFloat(document.getElementById('protein-percentage').value) || 0;
+    const fatPercentageValue = parseFloat(document.getElementById('fat-percentage').value) || 0;
 
-  document.getElementById('serving-size').innerText = servingSize.toFixed() + measure;
-  document.getElementById('package-size').innerText = packageSize.toFixed() + measure;
-  document.getElementById('servings-per-package').innerText = servingsPerPackage.toFixed(1);
-  document.getElementById('package-carbs-percentage').innerText = carbsPerPackage.toFixed() + '%';
-  document.getElementById('package-protein-percentage').innerText = proteinPerPackage.toFixed() + '%';
-  document.getElementById('package-fat-percentage').innerText = fatPerPackage.toFixed() + '%';
-  document.getElementById('package-sodium-percentage').innerText = sodiumPerPackage.toFixed() + '%';
-  document.getElementById('food-carbs-percentage').innerText = carbsFilled.toFixed() + '%';
-  document.getElementById('food-protein-percentage').innerText = proteinFilled.toFixed() + '%';
-  document.getElementById('food-fat-percentage').innerText = fatFilled.toFixed() + '%';
-  document.getElementById('food-sodium-percentage').innerText = sodiumFilled.toFixed() + '%';
+    const totalCarbsNeeded = ((carbsPercentageValue * totalCalories) / 100) / 4;
+    const totalProteinNeeded = ((proteinPercentageValue * totalCalories) / 100) / 4;
+    const totalFatNeeded = ((fatPercentageValue * totalCalories) / 100) / 9;
+
+    carbsFilled = (selectedFood.carbs / totalCarbsNeeded) * 100;
+    proteinFilled = (selectedFood.protein / totalProteinNeeded) * 100;
+    fatFilled = (selectedFood.fat / totalFatNeeded) * 100;
+    sodiumFilled = (selectedFood.sodium / 2000) *100
+
+    const measure = (selectedFood.measure);
+    const servingSize = (selectedFood.serving);
+    const carbsPerPackage = carbsFilled;
+    const proteinPerPackage = proteinFilled;
+    const fatPerPackage = fatFilled;
+    const sodiumPerPackage = sodiumFilled;
+
+    document.getElementById('serving-size').innerText = servingSize.toFixed() + measure;
+    document.getElementById('package-size').innerText = 'No Aplica';
+    document.getElementById('servings-per-package').innerText = 'No Aplica';
+    document.getElementById('package-percentage').style.display = 'none';
+    document.getElementById('package-carbs-percentage').innerText = carbsPerPackage.toFixed() + '%';
+    document.getElementById('package-protein-percentage').innerText = proteinPerPackage.toFixed() + '%';
+    document.getElementById('package-fat-percentage').innerText = fatPerPackage.toFixed() + '%';
+    document.getElementById('package-sodium-percentage').innerText = sodiumPerPackage.toFixed() + '%';
+    document.getElementById('food-carbs-percentage').innerText = carbsFilled.toFixed() + '%';
+    document.getElementById('food-protein-percentage').innerText = proteinFilled.toFixed() + '%';
+    document.getElementById('food-fat-percentage').innerText = fatFilled.toFixed() + '%';
+    document.getElementById('food-sodium-percentage').innerText = sodiumFilled.toFixed() + '%';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -187,6 +222,9 @@ function addFoodToMenu() {
   const nameCell = document.createElement('td');
   nameCell.textContent = selectedProduct;
 
+  const groupCell = document.createElement('td');
+  groupCell.textContent = selectedFood.group
+
   const sizeCell = document.createElement('td');
   sizeCell.textContent = totalSize.toFixed() + selectedFood.measure;
 
@@ -226,6 +264,7 @@ function addFoodToMenu() {
 
   // Add cells to the row
   row.appendChild(nameCell);
+  row.appendChild(groupCell);
   row.appendChild(sizeCell);
   row.appendChild(carbsCell);
   row.appendChild(proteinCell);

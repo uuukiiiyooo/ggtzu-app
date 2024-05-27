@@ -3,96 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nutrition App</title>
+    <title>GG-Tzu - Calculadora de nutrientes</title>
     <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
   <header>
-      <h1>Nutrition App</h1>
+      <h1>Calculadora de nutrientes</h1>
   </header>
 
   <section id="physiological-data">
-  <h2>Physiological Data</h2>
+  <h2>Información fisiológica</h2>
   <form id="physiological-form">
     <div class="row">
       <div class="col">
-        <label for="weight">Weight (kg):</label>
+        <label for="weight">Peso (kg):</label>
         <input type="number" id="weight" name="weight" min="0" step="0.1" required>
       </div>
       <div class="col">
-        <label for="height">Height (cm):</label>
+        <label for="height">Estatura (cm):</label>
         <input type="number" id="height" name="height" min="0" step="0.1" required>
       </div>
       <div class="col">
-        <label for="age">Age (years):</label>
+        <label for="age">Edad (años):</label>
         <input type="number" id="age" name="age" min="0" required>
       </div>
       <div class="col">
-        <label for="sex">Sex:</label>
+        <label for="sex">Sexo:</label>
         <select id="sex" name="sex">
-          <option value="" disabled selected hidden>Select</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
+          <option value="" disabled selected hidden>Seleccione</option>
+          <option value="male">Hombre</option>
+          <option value="female">Mujer</option>
         </select>
       </div>
     </div>
     <div class="row">
-        <button id="calculate-button" onclick="addPhysiologicalData(event)">Calculate</button>
+        <button id="calculate-button" onclick="addPhysiologicalData(event)">Calcular</button>
     </div> 
   </form>
   <div class="row" id="calories-count">
     <div class="col">
-      <label>Suggested Calories: </label>
+      <label>Calorías sugeridas: </label>
       <span id="required-calories"></span>
     </div>
-  </div>
-  <div class="row" id="reset-button-row">
-      <button id="reset-button" onclick="location.reload()">Reset</button>
+    <div class="col">
+      <button id="reset-button" onclick="location.reload()">Reiniciar</button>
+    </div>
   </div>
   </section>
 
   <section id="diet-type">
-    <h2>Diet Type</h2>
+    <h2>Tipo de dieta</h2>
     <form id="diet-form">
       <div class="row" id="suggested-calories">
         <div class="col">
-          <label for="multiplier">Deficit/surplus</label>
+          <label for="multiplier">Déficit/superávit</label>
           <select id="multiplier" name="multiplier">
-            <option value="none" selected>None</option>
-            <option value="30">30% surplus</option>
-            <option value="20">20% surplus</option>
-            <option value="10">10% surplus</option>
-            <option value="-10">10% deficit</option>
-            <option value="-20">20% deficit</option>
-            <option value="-30">30% deficit</option>
+            <option value="none" selected>Ninguno</option>
+            <option value="30">30% superávit</option>
+            <option value="20">20% superávit</option>
+            <option value="10">10% superávit</option>
+            <option value="-10">10% déficit</option>
+            <option value="-20">20% déficit</option>
+            <option value="-30">30% déficit</option>
           </select>
         </div>
         <div class="col">
-          <label for="training-calories">Training Calories:</label>
+          <label for="training-calories">Calorías de entrenamiento:</label>
           <input type="number" id="training-calories" name="training-calories" value="0" min="0" step="0.1">
         </div>
         <div class="col" id="total-calories">
-          <label>Total Calories: </label>
+          <label>Calorías totales: </label>
           <span id="total-calories-value"></span>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <label for="carbs-percentage">Carbs Percentage</label>
+          <label for="carbs-percentage">Porcentaje de Carbos</label>
           <input type="number" id="carbs-percentage" name="carbs-percentage" value="50" min="15" max="70" step="5">
-          <label>Carbs g/kg</label>
+          <label>Carbos g/kg</label>
           <span id="carbs-grkg"></span>
         </div>
         <div class="col">
-          <label for="protein-percentage">Protein Percentage</label>
+          <label for="protein-percentage">Porcentaje de Proteínas</label>
           <input type="number" id="protein-percentage" name="protein-percentage" value="30" min="15" max="70" step="5">
-          <label>Protein g/kg</label>
+          <label>Proteínas g/kg</label>
           <span id="protein-grkg"></span>
         </div>
         <div class="col">
-          <label for="fat-percentage">Fat Percentage</label>
+          <label for="fat-percentage">Porcentaje de Lípidos</label>
           <input type="number" id="fat-percentage" name="fat-percentage" value="20" min="5" max="70" step="5">
-          <label>Fat g/kg</label>
+          <label>Lípidos g/kg</label>
           <span id="fat-grkg"></span>
         </div>
       </div>
@@ -100,101 +100,102 @@
   </section>
 
   <section id="food-information">
-    <h2>Food Information</h2>
+    <h2>Información de alimentos</h2>
     <div id="food-details">
       <!-- Display food information dynamically -->
       <div class="row">
         <div class="col">
-          <label for="group">Food group</label>
+          <label for="group">Grupo del alimento</label>
           <select id="group">
-            <option disabled selected hidden>Select food group</option>
+            <option disabled selected hidden>Seleccione</option>
           </select>
         </div>
         <div class="col">
-          <label for="product">Product:</label>
+          <label for="product">Producto</label>
           <select id="product" name="product">
-            <option disabled selected hidden>Select Option</option>
+            <option disabled selected hidden>Seleccione</option>
           </select>
         </div>      
       </div>
       <div class="row">
         <div class="col">
-          <label>Serving Size:</label>
+          <label>Tamaño de porción:</label>
           <span id="serving-size"></span>
         </div>
         <div class="col">
-          <label>Package Size:</label>
+          <label>Tamaño del envase:</label>
           <span id="package-size"></span>
         </div>
         <div class="col">
-          <label>Serving per package:</label>
+          <label>Porciones por envase:</label>
           <span id="servings-per-package"></span>
         </div>
       </div>
-      <h4>Per package:</h4>
-      <div class="row">
-        <div class="col">
-          <label>Carbs Filled: </label>
-          <span id="package-carbs-percentage">0%</span>
-        </div>
-        <div class="col">
-          <label>Protein Filled: </label>
-          <span id="package-protein-percentage">0%</span>
-        </div>
-        <div class="col">
-          <label>Fat Filled: </label>
-          <span id="package-fat-percentage">0%</span>
-        </div>
-        <div class="col">
-          <label>Sodium Filled: </label>
-          <span id="package-sodium-percentage">0%</span>
-        </div>
-      </div>
-      <h4>Per serving:</h4>
-      <div class="row">
-        <div class="col">
-          <label>Carbs Filled: </label>
-          <span id="food-carbs-percentage">0%</span>
-        </div>
-        <div class="col">
-          <label>Protein Filled: </label>
-          <span id="food-protein-percentage">0%</span>
-        </div>
-        <div class="col">
-          <label>Fat Filled: </label>
-          <span id="food-fat-percentage">0%</span>
-        </div>
-        <div class="col">
-          <label>Sodium Filled: </label>
-          <span id="food-sodium-percentage">0%</span>
-        </div>
+      <div class="row" id="package-percentage">
+        <h4>Aporta por envase:</h4>
+          <div class="col">
+            <label>Carbos aportados:</label>
+            <span id="package-carbs-percentage">0%</span>
+          </div>
+          <div class="col">
+            <label>Proteínas aportadas:</label>
+            <span id="package-protein-percentage">0%</span>
+          </div>
+          <div class="col">
+            <label>Lípidos aportados:</label>
+            <span id="package-fat-percentage">0%</span>
+          </div>
+          <div class="col">
+            <label>Sodio aportado:</label>
+            <span id="package-sodium-percentage">0%</span>
+          </div>
       </div>
       <div class="row">
-        <h2>Add to menu</h2>
+        <h4>Por porción</h4>
+          <div class="col">
+            <label>Carbos aportados:</label>
+            <span id="food-carbs-percentage">0%</span>
+          </div>
+          <div class="col">
+            <label>Proteínas aportadas:</label>
+            <span id="food-protein-percentage">0%</span>
+          </div>
+          <div class="col">
+            <label>Lípidos aportados:</label>
+            <span id="food-fat-percentage">0%</span>
+          </div>
+          <div class="col">
+            <label>Sodio aportado:</label>
+            <span id="food-sodium-percentage">0%</span>
+          </div>
+      </div>
+      <div class="row">
+        <h2>Agregar al menú</h2>
         <div class="col">
-          <label for="addedServings">Number of servings:</label>
+          <label for="addedServings">Número de porciones:</label>
           <input type="number" name="addedServings" id="addedServings">
         </div>
         <div class="col">
-          <button id="add-food-button">Add</button>
+          <button id="add-food-button">Agregar</button>
         </div>
       </div>
     </div>
   </section>
 
   <section id="added-food-menu">
-    <h2>Menu</h2>
+    <h2>Menú</h2>
     <div class="row" id="added-menu-list">
       <table id="menuTable">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Carbs</th>
-            <th>Protein</th>
-            <th>Fat</th>
-            <th>Sodium</th>
-            <th>Remove</th>
+            <th>Nombre</th>
+            <th>Grupo</th>
+            <th>Cantidad</th>
+            <th>Carbos</th>
+            <th>Proteína</th>
+            <th>Lípidos</th>
+            <th>Sodio</th>
+            <th>Eliminar</th>
           </tr>
         </thead>
         <tbody>
@@ -204,16 +205,16 @@
     </div>
     <div class="row">
       <div class="col">
-        <p>Total Carbs:</p><span id="total-carbs-menu"></span>
+        <p>Carbos totales:</p><span id="total-carbs-menu"></span>
       </div>
       <div class="col">
-        <p>Total Protein:</p><span id="total-protein-menu"></span>
+        <p>Proteínas totales:</p><span id="total-protein-menu"></span>
       </div>
       <div class="col">
-        <p>Total Fat:</p><span id="total-fat-menu"></span>
+        <p>Lípidos totales:</p><span id="total-fat-menu"></span>
       </div>
       <div class="col">
-        <p>Total Sodium:</p><span id="total-sodium-menu"></span>
+        <p>Sodio total:</p><span id="total-sodium-menu"></span>
       </div>
     </div>
   </section>
