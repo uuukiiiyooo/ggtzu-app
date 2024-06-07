@@ -35,6 +35,10 @@ section {
   flex-wrap: wrap;
 }
 
+#activity-factor-col, #training-calories-col {
+  display: none;
+}
+
 .row {
   display: ruby;
   width: 100%;

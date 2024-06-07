@@ -56,17 +56,35 @@ function addPhysiologicalData(event) {
   document.getElementById('required-calories').innerText = requiredCalories.toFixed();
 
   const multiplier = document.getElementById('multiplier');
+  const factorType = document.getElementById('factor-type');
+  const activityFactor = document.getElementById('activity-factor');
   const trainingCaloriesInput = document.getElementById('training-calories');
   const carbsPercentage = document.getElementById('carbs-percentage');
   const proteinPercentage = document.getElementById('protein-percentage');
   const fatPercentage = document.getElementById('fat-percentage');
 
   function updateTotals() {
-    const trainingCaloriesValue = parseFloat(trainingCaloriesInput.value) || 0;
     const multiplierValue = parseFloat(multiplier.value) || 0;
-    const adjustedCalories = requiredCalories + ((requiredCalories * multiplierValue) / 100);
-    totalCalories = adjustedCalories + trainingCaloriesValue;
-    document.getElementById('total-calories-value').innerText = totalCalories.toFixed();
+    // Update function to work with activity factor or training calories depending on input
+    if (factorType.value == 'activityFactor') {
+      document.getElementById('activity-factor-col').style.display = 'inline-block';
+      document.getElementById('training-calories-col').style.display = 'none';
+      const activityFactorValue = parseFloat(activityFactor.value) || 1;
+      totalCalories = (baseCalories * activityFactorValue) + (baseCalories * 0.1);
+      const adjustedCalories = totalCalories + ((totalCalories * multiplierValue) / 100);
+      document.getElementById('total-calories-value').innerText = adjustedCalories.toFixed();
+    } else if (factorType.value == 'directCalories') {
+      document.getElementById('training-calories-col').style.display = 'inline-block';
+      document.getElementById('activity-factor-col').style.display = 'none';
+      const trainingCaloriesValue = parseFloat(trainingCaloriesInput.value) || 0;
+      totalCalories = requiredCalories + trainingCaloriesValue;
+      const adjustedCalories = totalCalories + ((totalCalories * multiplierValue) / 100 );
+      document.getElementById('total-calories-value').innerText = adjustedCalories.toFixed();
+    } else {
+      totalCalories = requiredCalories + ((requiredCalories * multiplierValue) / 100 );
+      const adjustedCalories = totalCalories;
+      document.getElementById('total-calories-value').innerText = adjustedCalories.toFixed();
+    }
 
     const carbsPercentageValue = parseFloat(carbsPercentage.value) || 0;
     const proteinPercentageValue = parseFloat(proteinPercentage.value) || 0;
@@ -84,6 +102,8 @@ function addPhysiologicalData(event) {
   }
 
   multiplier.addEventListener('change', updateTotals);
+  factorType.addEventListener('change', updateTotals);
+  activityFactor.addEventListener('change', updateTotals);
   trainingCaloriesInput.addEventListener('input', updateTotals);
   carbsPercentage.addEventListener('input', updateTotals);
   proteinPercentage.addEventListener('input', updateTotals);
