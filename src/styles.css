@@ -26,7 +26,7 @@ section {
   border: 1px solid #ccc;
 }
 
-#calories-count, #reset-button, #diet-type, #food-information, #added-food-menu {
+#calories-count, #reset-button, #diet-type, #food-information, #added-food-menu, #food-distribution {
   display: none;
 }
 
@@ -46,6 +46,10 @@ section {
   margin-bottom: 7px;
 }
 
+#food-distribution .row {
+  display: flex;
+}
+
 .col {
   flex: 1;
   margin-right: 15px;
@@ -60,6 +64,11 @@ section {
   margin: 0;
 }
 
+#food-distribution .col {
+  width: 11%;
+  margin: 0;
+}
+
 label {
   display: block;
   margin-bottom: 10px;
@@ -68,6 +77,10 @@ label {
 input[type="number"] {
   width: 100px;
   text-align: center;
+}
+
+#food-distribution input {
+  width: 30px;
 }
 
 button {

@@ -81,6 +81,8 @@ function addPhysiologicalData(event) {
       const adjustedCalories = totalCalories + ((totalCalories * multiplierValue) / 100 );
       document.getElementById('total-calories-value').innerText = adjustedCalories.toFixed();
     } else {
+      document.getElementById('activity-factor-col').style.display = 'none';
+      document.getElementById('training-calories-col').style.display = 'none';
       totalCalories = requiredCalories + ((requiredCalories * multiplierValue) / 100 );
       const adjustedCalories = totalCalories;
       document.getElementById('total-calories-value').innerText = adjustedCalories.toFixed();
@@ -99,6 +101,7 @@ function addPhysiologicalData(event) {
     document.getElementById('fat-grkg').innerText = fatGkg.toFixed(1);
     
     updateFoodInformation();
+    updateFoodDistribution();
   }
 
   multiplier.addEventListener('change', updateTotals);
@@ -108,14 +111,49 @@ function addPhysiologicalData(event) {
   carbsPercentage.addEventListener('input', updateTotals);
   proteinPercentage.addEventListener('input', updateTotals);
   fatPercentage.addEventListener('input', updateTotals);
-
   trainingCaloriesInput.dispatchEvent(new Event('input'));
+  vegetableDistribution.addEventListener('change', updateTotals);
 
   document.getElementById('calculate-button').style.display = 'none';
   document.getElementById('calories-count').style.display = 'block';
   document.getElementById('reset-button').style.display = 'ruby';
   document.getElementById('diet-type').style.display = 'block';
+  document.getElementById('food-distribution').style.display = 'block';
   document.getElementById('food-information').style.display = 'block';
+}
+
+// Function to distribute macros according to food group value
+const vegetableDistribution = document.getElementById('vegetable-count');
+
+function updateFoodDistribution() {
+  // Calculate total calories needed
+  const totalCalories = document.getElementById('total-calories-value');
+  const totalCaloriesValue = parseFloat(totalCalories.textContent);
+  
+  // Get carbs info
+  const carbsPercentage = document.getElementById('carbs-percentage');
+  const carbsPercentageValue = parseFloat(carbsPercentage.value);
+  const neededCarbsGram = ( (totalCaloriesValue * carbsPercentageValue) / 100 ) / 4;
+  
+  // Get protein info
+  const proteinPercentage = document.getElementById('protein-percentage');
+  const proteinPercentageValue = parseFloat(proteinPercentage.value);
+  const neededProteinsGram = ( (totalCaloriesValue * proteinPercentageValue) / 100 ) / 4;
+  
+  // Get vegetable input to calculate each macro based on needed calories
+  const vegetableDistributionCount = document.getElementById('vegetable-count').value || 0;
+  
+  const vegetableCarbGram = vegetableDistributionCount * 4;
+  const filledCarbs = ( vegetableCarbGram * 100 ) / neededCarbsGram;
+  
+  const vegetablesProteinGram = vegetableDistributionCount * 2;
+  const filledProtein = (vegetablesProteinGram * 100) / neededProteinsGram;
+  
+
+  document.getElementById('vegetable-carb-gram').innerText = vegetableCarbGram.toFixed();
+  document.getElementById('vegetable-carb-percentage').innerText = filledCarbs.toFixed();
+  document.getElementById('vegetable-protein-gram').innerText = vegetablesProteinGram.toFixed();
+  document.getElementById('vegetable-protein-percentage').innerText = filledProtein.toFixed();
 }
 
 
