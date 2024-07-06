@@ -125,7 +125,7 @@ function addPhysiologicalData(event) {
   ofwpDistribution.addEventListener('change', updateTotals);
   snfDistribution.addEventListener('change', updateTotals);
   swfDistribution.addEventListener('change', updateTotals);
-  abDistributionCount.addEventListener('change', updateTotals);
+  abDistribution.addEventListener('change', updateTotals);
   
 
   document.getElementById('calculate-button').style.display = 'none';
@@ -150,7 +150,7 @@ const ofnpDistribution = document.getElementById('ofnp-count');
 const ofwpDistribution = document.getElementById('ofwp-count');
 const snfDistribution = document.getElementById('snf-count');
 const swfDistribution = document.getElementById('swf-count');
-const abDistributionCount = document.getElementById('ab-count');
+const abDistribution = document.getElementById('ab-count');
 
 function updateFoodDistribution() {
   // Calculate total calories needed
@@ -171,199 +171,146 @@ function updateFoodDistribution() {
   const fatPercentage = document.getElementById('fat-percentage');
   const fatPercentageValue = parseFloat(fatPercentage.value);
   const neededFatGram = ((totalCaloriesValue * fatPercentageValue) / 100) / 9;
+
+  // Initialize totals
+  let totalCarbGram = 0;
+  let totalCarbPercentage = 0;
+  let totalProteinGram = 0;
+  let totalProteinPercentage = 0;
+  let totalFatGram = 0;
+  let totalFatPercentage = 0;
+
+  function calculateMacro(distributionCount, carbPerUnit, proteinPerUnit, fatPerUnit) {
+    const carbGram = distributionCount * carbPerUnit;
+    const carbPercentage = (carbGram * 100) / neededCarbsGram;
+    totalCarbGram += carbGram;
+    totalCarbPercentage += carbPercentage;
+
+    const proteinGram = distributionCount * proteinPerUnit;
+    const proteinPercentage = (proteinGram * 100) / neededProteinsGram;
+    totalProteinGram += proteinGram;
+    totalProteinPercentage += proteinPercentage;
+
+    const fatGram = distributionCount * fatPerUnit;
+    const fatPercentage = (fatGram * 100) / neededFatGram;
+    totalFatGram += fatGram;
+    totalFatPercentage += fatPercentage;
+
+    return {
+      carbGram, carbPercentage,
+      proteinGram, proteinPercentage,
+      fatGram, fatPercentage
+    };
+  }
   
-  // Get vegetable input to calculate each macro based on needed calories
-  const vegetableDistributionCount = document.getElementById('vegetable-count').value || 0;
-  
-  const vegetableCarbGram = vegetableDistributionCount * 4;
-  const vegetableFilledCarbs = ( vegetableCarbGram * 100 ) / neededCarbsGram;
-  
-  const vegetablesProteinGram = vegetableDistributionCount * 2;
-  const vegetableFilledProtein = (vegetablesProteinGram * 100) / neededProteinsGram;
+  // Calculate each food distribution macros
+  const vegetableDistributionCount = parseFloat(vegetableDistribution.value) || 0;
+  const vegetableMacros = calculateMacro(vegetableDistributionCount, 4, 2, 0);
+  document.getElementById('vegetable-carb-gram').innerText = vegetableMacros.carbGram.toFixed();
+  document.getElementById('vegetable-carb-percentage').innerText = vegetableMacros.carbPercentage.toFixed(1);
+  document.getElementById('vegetable-protein-gram').innerText = vegetableMacros.proteinGram.toFixed();
+  document.getElementById('vegetable-protein-percentage').innerText = vegetableMacros.proteinPercentage.toFixed(1);
 
-  document.getElementById('vegetable-carb-gram').innerText = vegetableCarbGram.toFixed();
-  document.getElementById('vegetable-carb-percentage').innerText = vegetableFilledCarbs.toFixed();
-  document.getElementById('vegetable-protein-gram').innerText = vegetablesProteinGram.toFixed();
-  document.getElementById('vegetable-protein-percentage').innerText = vegetableFilledProtein.toFixed();
+  const fruitDistributionCount = parseFloat(fruitDistribution.value) || 0;
+  const fruitMacros = calculateMacro(fruitDistributionCount, 15, 0, 0);
+  document.getElementById('fruit-carb-gram').innerText = fruitMacros.carbGram.toFixed();
+  document.getElementById('fruit-carb-percentage').innerText = fruitMacros.carbPercentage.toFixed(1);
 
-  // Get fruit input to calculate each macro based on needed calories
-  const fruitDistributionCount = document.getElementById('fruit-count').value || 0;
+  const ctnfDistributionCount = parseFloat(ctnfDistribution.value) || 0;
+  const ctnfMacros = calculateMacro(ctnfDistributionCount, 15, 2, 0);
+  document.getElementById('ctnf-carb-gram').innerText = ctnfMacros.carbGram.toFixed();
+  document.getElementById('ctnf-carb-percentage').innerText = ctnfMacros.carbPercentage.toFixed(1);
+  document.getElementById('ctnf-protein-gram').innerText = ctnfMacros.proteinGram.toFixed();
+  document.getElementById('ctnf-protein-percentage').innerText = ctnfMacros.proteinPercentage.toFixed(1);
 
-  const fruitCarbGram = fruitDistributionCount * 15;
-  const fruitFilledCarbs = ( fruitCarbGram * 100 ) / neededCarbsGram;
+  const ctwfDistributionCount = parseFloat(ctwfDistribution.value) || 0;
+  const ctwfMacros = calculateMacro(ctwfDistributionCount, 15, 2, 5);
+  document.getElementById('ctwf-carb-gram').innerText = ctwfMacros.carbGram.toFixed();
+  document.getElementById('ctwf-carb-percentage').innerText = ctwfMacros.carbPercentage.toFixed(1);
+  document.getElementById('ctwf-protein-gram').innerText = ctwfMacros.proteinGram.toFixed();
+  document.getElementById('ctwf-protein-percentage').innerText = ctwfMacros.proteinPercentage.toFixed(1);
+  document.getElementById('ctwf-fat-gram').innerText = ctwfMacros.fatGram.toFixed();
+  document.getElementById('ctwf-fat-percentage').innerText = ctwfMacros.fatPercentage.toFixed(1);
 
-  document.getElementById('fruit-carb-gram').innerText = fruitCarbGram.toFixed();
-  document.getElementById('fruit-carb-percentage').innerText = fruitFilledCarbs.toFixed();
+  const legumeDistributionCount = parseFloat(legumeDistribution.value) || 0;
+  const legumeMacros = calculateMacro(legumeDistributionCount, 20, 8, 1);
+  document.getElementById('legume-carb-gram').innerText = legumeMacros.carbGram.toFixed();
+  document.getElementById('legume-carb-percentage').innerText = legumeMacros.carbPercentage.toFixed(1);
+  document.getElementById('legume-protein-gram').innerText = legumeMacros.proteinGram.toFixed();
+  document.getElementById('legume-protein-percentage').innerText = legumeMacros.proteinPercentage.toFixed(1);
+  document.getElementById('legume-fat-gram').innerText = legumeMacros.fatGram.toFixed();
+  document.getElementById('legume-fat-percentage').innerText = legumeMacros.fatPercentage.toFixed(1);
 
-  // Get ctnf input to calculate each macro based on needed calories
-  const ctnfDistributionCount = document.getElementById('ctnf-count').value || 0;
+  const aovlfDistributionCount = parseFloat(aovlfDistribution.value) || 0;
+  const aovlfMacros = calculateMacro(aovlfDistributionCount, 0, 7, 1);
+  document.getElementById('aovlf-protein-gram').innerText = aovlfMacros.proteinGram.toFixed();
+  document.getElementById('aovlf-protein-percentage').innerText = aovlfMacros.proteinPercentage.toFixed(1);
+  document.getElementById('aovlf-fat-gram').innerText = aovlfMacros.fatGram.toFixed();
+  document.getElementById('aovlf-fat-percentage').innerText = aovlfMacros.fatPercentage.toFixed(1);
 
-  const ctnfCarbGram = ctnfDistributionCount * 15;
-  const ctnfFilledCarbs = ( ctnfCarbGram * 100 ) / neededCarbsGram;
-  
-  const ctnfProteinGram = ctnfDistributionCount * 2;
-  const ctnfFilledProtein = (ctnfProteinGram * 100) / neededProteinsGram;
+  const aolfDistributionCount = parseFloat(aolfDistribution.value) || 0;
+  const aolfMacros = calculateMacro(aolfDistributionCount, 0, 7, 3);
+  document.getElementById('aolf-protein-gram').innerText = aolfMacros.proteinGram.toFixed();
+  document.getElementById('aolf-protein-percentage').innerText = aolfMacros.proteinPercentage.toFixed(1);
+  document.getElementById('aolf-fat-gram').innerText = aolfMacros.fatGram.toFixed();
+  document.getElementById('aolf-fat-percentage').innerText = aolfMacros.fatPercentage.toFixed(1);
 
-  document.getElementById('ctnf-carb-gram').innerText = ctnfCarbGram.toFixed();
-  document.getElementById('ctnf-carb-percentage').innerText = ctnfFilledCarbs.toFixed();
-  document.getElementById('ctnf-protein-gram').innerText = ctnfProteinGram.toFixed();
-  document.getElementById('ctnf-protein-percentage').innerText = ctnfFilledProtein.toFixed();
+  const aomfDistributionCount = parseFloat(aomfDistribution.value) || 0;
+  const aomfMacros = calculateMacro(aomfDistributionCount, 0, 7, 5);
+  document.getElementById('aomf-protein-gram').innerText = aomfMacros.proteinGram.toFixed();
+  document.getElementById('aomf-protein-percentage').innerText = aomfMacros.proteinPercentage.toFixed(1);
+  document.getElementById('aomf-fat-gram').innerText = aomfMacros.fatGram.toFixed();
+  document.getElementById('aomf-fat-percentage').innerText = aomfMacros.fatPercentage.toFixed(1);
 
-  // Get ctwf input to calculate each macro based on needed calories
-  const ctwfDistributionCount = document.getElementById('ctwf-count').value || 0;
+  const aohfDistributionCount = parseFloat(aohfDistribution.value) || 0;
+  const aohfMacros = calculateMacro(aohfDistributionCount, 0, 7, 8);
+  document.getElementById('aohf-protein-gram').innerText = aohfMacros.proteinGram.toFixed();
+  document.getElementById('aohf-protein-percentage').innerText = aohfMacros.proteinPercentage.toFixed(1);
+  document.getElementById('aohf-fat-gram').innerText = aohfMacros.fatGram.toFixed();
+  document.getElementById('aohf-fat-percentage').innerText = aohfMacros.fatPercentage.toFixed(1);
 
-  const ctwfCarbGram = ctwfDistributionCount * 15;
-  const ctwfFilledCarbs = ( ctwfCarbGram * 100 ) / neededCarbsGram;
-  
-  const ctwfProteinGram = ctwfDistributionCount * 2;
-  const ctwfFilledProtein = (ctwfProteinGram * 100) / neededProteinsGram;
+  const ofnpDistributionCount = parseFloat(ofnpDistribution.value) || 0;
+  const ofnpMacros = calculateMacro(ofnpDistributionCount, 0, 0, 5);
+  document.getElementById('ofnp-fat-gram').innerText = ofnpMacros.fatGram.toFixed();
+  document.getElementById('ofnp-fat-percentage').innerText = ofnpMacros.fatPercentage.toFixed(1);
 
-  const ctwfFatGram = ctwfDistributionCount * 5;
-  const ctwfFilledFat = (ctwfFatGram * 100) / neededFatGram;
+  const ofwpDistributionCount = parseFloat(ofwpDistribution.value) || 0;
+  const ofwpMacros = calculateMacro(ofwpDistributionCount, 3, 3, 5);
+  document.getElementById('ofwp-carb-gram').innerText = ofwpMacros.carbGram.toFixed();
+  document.getElementById('ofwp-carb-percentage').innerText = ofwpMacros.carbPercentage.toFixed(1);
+  document.getElementById('ofwp-protein-gram').innerText = ofwpMacros.proteinGram.toFixed();
+  document.getElementById('ofwp-protein-percentage').innerText = ofwpMacros.proteinPercentage.toFixed(1);
+  document.getElementById('ofwp-fat-gram').innerText = ofwpMacros.fatGram.toFixed();
+  document.getElementById('ofwp-fat-percentage').innerText = ofwpMacros.fatPercentage.toFixed(1);
 
-  document.getElementById('ctwf-carb-gram').innerText = ctwfCarbGram.toFixed();
-  document.getElementById('ctwf-carb-percentage').innerText = ctwfFilledCarbs.toFixed();
-  document.getElementById('ctwf-protein-gram').innerText = ctwfProteinGram.toFixed();
-  document.getElementById('ctwf-protein-percentage').innerText = ctwfFilledProtein.toFixed();
-  document.getElementById('ctwf-fat-gram').innerText = ctwfFatGram.toFixed();
-  document.getElementById('ctwf-fat-percentage').innerText = ctwfFilledFat.toFixed();
-
-  // Get legume input to calculate each macro based on needed calories
-  const legumeDistributionCount = document.getElementById('legume-count').value || 0;
-
-  const legumeCarbGram = legumeDistributionCount * 20;
-  const legumeFilledCarbs = ( legumeCarbGram * 100 ) / neededCarbsGram;
-  
-  const legumeProteinGram = legumeDistributionCount * 8;
-  const legumeFilledProtein = (legumeProteinGram * 100) / neededProteinsGram;
-
-  const legumeFatGram = legumeDistributionCount * 1;
-  const legumeFilledFat = (legumeFatGram * 100) / neededFatGram;
-
-  document.getElementById('legume-carb-gram').innerText = legumeCarbGram.toFixed();
-  document.getElementById('legume-carb-percentage').innerText = legumeFilledCarbs.toFixed();
-  document.getElementById('legume-protein-gram').innerText = legumeProteinGram.toFixed();
-  document.getElementById('legume-protein-percentage').innerText = legumeFilledProtein.toFixed();
-  document.getElementById('legume-fat-gram').innerText = legumeFatGram.toFixed();
-  document.getElementById('legume-fat-percentage').innerText = legumeFilledFat.toFixed();
-
-  // Get aovlf input to calculate each macro based on needed calories
-  const aovlfDistributionCount = document.getElementById('aovlf-count').value || 0;
-  
-  const aovlfProteinGram = aovlfDistributionCount * 7;
-  const aovlfFilledProtein = (aovlfProteinGram * 100) / neededProteinsGram;
-
-  const aovlfFatGram = aovlfDistributionCount * 1;
-  const aovlfFilledFat = (aovlfFatGram * 100) / neededFatGram;
-
-  document.getElementById('aovlf-protein-gram').innerText = aovlfProteinGram.toFixed();
-  document.getElementById('aovlf-protein-percentage').innerText = aovlfFilledProtein.toFixed();
-  document.getElementById('aovlf-fat-gram').innerText = aovlfFatGram.toFixed();
-  document.getElementById('aovlf-fat-percentage').innerText = aovlfFilledFat.toFixed();
-
-  // Get aolf input to calculate each macro based on needed calories
-  const aolfDistributionCount = document.getElementById('aolf-count').value || 0;
-
-  const aolfProteinGram = aolfDistributionCount * 7;
-  const aolfFilledProtein = (aolfProteinGram * 100) / neededProteinsGram;
-
-  const aolfFatGram = aolfDistributionCount * 3;
-  const aolfFilledFat = (aolfFatGram * 100) / neededFatGram;
-
-  document.getElementById('aolf-protein-gram').innerText = aolfProteinGram.toFixed();
-  document.getElementById('aolf-protein-percentage').innerText = aolfFilledProtein.toFixed();
-  document.getElementById('aolf-fat-gram').innerText = aolfFatGram.toFixed();
-  document.getElementById('aolf-fat-percentage').innerText = aolfFilledFat.toFixed();
-
-  // Get aomf input to calculate each macro based on needed calories
-  const aomfDistributionCount = document.getElementById('aomf-count').value || 0;
-
-  const aomfProteinGram = aomfDistributionCount * 7;
-  const aomfFilledProtein = (aomfProteinGram * 100) / neededProteinsGram;
-
-  const aomfFatGram = aomfDistributionCount * 5;
-  const aomfFilledFat = (aomfFatGram * 100) / neededFatGram;
-
-  document.getElementById('aomf-protein-gram').innerText = aomfProteinGram.toFixed();
-  document.getElementById('aomf-protein-percentage').innerText = aomfFilledProtein.toFixed();
-  document.getElementById('aomf-fat-gram').innerText = aomfFatGram.toFixed();
-  document.getElementById('aomf-fat-percentage').innerText = aomfFilledFat.toFixed();
-
-  // Get aohf input to calculate each macro based on needed calories
-  const aohfDistributionCount = document.getElementById('aohf-count').value || 0;
-
-  const aohfProteinGram = aohfDistributionCount * 7;
-  const aohfFilledProtein = (aohfProteinGram * 100) / neededProteinsGram;
-
-  const aohfFatGram = aohfDistributionCount * 8;
-  const aohfFilledFat = (aohfFatGram * 100) / neededFatGram;
-
-  document.getElementById('aohf-protein-gram').innerText = aohfProteinGram.toFixed();
-  document.getElementById('aohf-protein-percentage').innerText = aohfFilledProtein.toFixed();
-  document.getElementById('aohf-fat-gram').innerText = aohfFatGram.toFixed();
-  document.getElementById('aohf-fat-percentage').innerText = aohfFilledFat.toFixed();
-
-  // Get aohf input to calculate each macro based on needed calories
-  const ofnpDistributionCount = document.getElementById('ofnp-count').value || 0;
-
-  const ofnpFatGram = ofnpDistributionCount * 5;
-  const ofnpFilledFat = (ofnpFatGram * 100) / neededFatGram;
-
-  document.getElementById('ofnp-fat-gram').innerText = ofnpFatGram.toFixed();
-  document.getElementById('ofnp-fat-percentage').innerText = ofnpFilledFat.toFixed();
-
-  // Get ofwp input to calculate each macro based on needed calories
-  const ofwpDistributionCount = document.getElementById('ofwp-count').value || 0;
-
-  const ofwpCarbGram = ofwpDistributionCount * 3;
-  const ofwpFilledCarbs = ( ofwpCarbGram * 100 ) / neededCarbsGram;
-  
-  const ofwpProteinGram = ofwpDistributionCount * 3;
-  const ofwpFilledProtein = (ofwpProteinGram * 100) / neededProteinsGram;
-
-  const ofwpFatGram = ofwpDistributionCount * 5;
-  const ofwpFilledFat = (ofwpFatGram * 100) / neededFatGram;
-
-  document.getElementById('ofwp-carb-gram').innerText = ofwpCarbGram.toFixed();
-  document.getElementById('ofwp-carb-percentage').innerText = ofwpFilledCarbs.toFixed();
-  document.getElementById('ofwp-protein-gram').innerText = ofwpProteinGram.toFixed();
-  document.getElementById('ofwp-protein-percentage').innerText = ofwpFilledProtein.toFixed();
-  document.getElementById('ofwp-fat-gram').innerText = ofwpFatGram.toFixed();
-  document.getElementById('ofwp-fat-percentage').innerText = ofwpFilledFat.toFixed();
-
-  // Get snf input to calculate each macro based on needed calories
   const snfDistributionCount = document.getElementById('snf-count').value || 0;
+  const snfMacros = calculateMacro(snfDistributionCount, 10, 0, 0);
+  document.getElementById('snf-carb-gram').innerText = snfMacros.carbGram.toFixed();
+  document.getElementById('snf-carb-percentage').innerText = snfMacros.carbPercentage.toFixed(1);
+  document.getElementById('snf-fat-gram').innerText = snfMacros.fatGram.toFixed();
+  document.getElementById('snf-fat-percentage').innerText = snfMacros.fatPercentage.toFixed(1);
 
-  const snfCarbGram = snfDistributionCount * 10;
-  const snfFilledCarbs = ( snfCarbGram * 100 ) / neededCarbsGram;
-
-  document.getElementById('snf-carb-gram').innerText = snfCarbGram.toFixed();
-  document.getElementById('snf-carb-percentage').innerText = snfFilledCarbs.toFixed();
-
-  // Get swf input to calculate each macro based on needed calories
   const swfDistributionCount = document.getElementById('swf-count').value || 0;
-
-  const swfCarbGram = swfDistributionCount * 10;
-  const swfFilledCarbs = ( swfCarbGram * 100 ) / neededCarbsGram;
-
-  const swfFatGram = swfDistributionCount * 5;
-  const swfFilledFat = (swfFatGram * 100) / neededFatGram;
-
-  document.getElementById('swf-carb-gram').innerText = swfCarbGram.toFixed();
-  document.getElementById('swf-carb-percentage').innerText = swfFilledCarbs.toFixed();
-  document.getElementById('swf-fat-gram').innerText = swfFatGram.toFixed();
-  document.getElementById('swf-fat-percentage').innerText = swfFilledFat.toFixed();
+  const swfMacros = calculateMacro(swfDistributionCount, 10, 0, 5);
+  document.getElementById('swf-carb-gram').innerText = swfMacros.carbGram.toFixed();
+  document.getElementById('swf-carb-percentage').innerText = swfMacros.carbPercentage.toFixed(1);
+  document.getElementById('swf-fat-gram').innerText = swfMacros.fatGram.toFixed();
+  document.getElementById('swf-fat-percentage').innerText = swfMacros.fatPercentage.toFixed(1);
 
   // Get ab input to calculate each macro based on needed calories
   const abDistributionCount = document.getElementById('ab-count').value || 0;
+  const abMacros = calculateMacro(abDistributionCount, 35, 0, 0);
+  document.getElementById('ab-carb-gram').innerText = abMacros.carbGram.toFixed();
+  document.getElementById('ab-carb-percentage').innerText = abMacros.carbPercentage.toFixed();
 
-  const abCarbGram = abDistributionCount * 35;
-  const abFilledCarbs = ( abCarbGram * 100 ) / neededCarbsGram;
+  document.getElementById('total-carb-gram').innerText = totalCarbGram.toFixed();
+  document.getElementById('total-carb-percentage').innerText = totalCarbPercentage.toFixed(1);
+  document.getElementById('total-protein-gram').innerText = totalProteinGram.toFixed();
+  document.getElementById('total-protein-percentage').innerText = totalProteinPercentage.toFixed(1);
+  document.getElementById('total-fat-gram').innerText = totalFatGram.toFixed();
+  document.getElementById('total-fat-percentage').innerText = totalFatPercentage.toFixed(1);
 
-  document.getElementById('ab-carb-gram').innerText = abCarbGram.toFixed();
-  document.getElementById('ab-carb-percentage').innerText = abFilledCarbs.toFixed();
-
-  // Calculate total distributed macros
+  console.log(abDistribution.value);
 }
 
 
